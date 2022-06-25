@@ -13,19 +13,19 @@ class CountryRepositoryImpl @Inject constructor(
     private val api : CountryApi
 ) :CountryRepository {
 
-    override suspend fun getCountries(): Flow<List<Country>> =
-        flow {
+    override suspend fun getCountries(): List<Country> =
+
             api.getCountry().let {
                 response ->
                 if(response.isSuccessful){
                     val countries = response.body()?.map {
                         mapper.map(it)
                     }?.sortedBy { it.name }
-                    emit(countries ?: emptyList())
+                    countries ?: emptyList()
                 }
                 else{
                     throw response.code().toNetworkError()
                 }
             }
-        }
+
 }

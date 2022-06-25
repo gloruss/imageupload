@@ -6,6 +6,6 @@ import kotlinx.coroutines.flow.Flow
 
 interface CountryRepository {
 
-    suspend fun getCountries() : Flow<List<Country>>
+    suspend fun getCountries() : List<Country>
 
 }

@@ -30,6 +30,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.*
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.SpanStyle
@@ -86,7 +87,7 @@ fun ImageGalleryContent(
     onCardClick: (Image) -> Unit,
     onImageDelete : (Image) -> Unit
 ){
-    Scaffold( backgroundColor = MaterialTheme.colors.background,
+    Scaffold( backgroundColor = MaterialTheme.colors.primary,
         modifier = Modifier.fillMaxSize(),
         topBar = { TopAppBar(
 
@@ -157,39 +158,40 @@ fun ImageCell(image: Image, onCardClick: (Image) -> Unit,onImageDelete: (Image) 
         .padding(10.dp)
         .clickable {
             onCardClick(image)
-        }, backgroundColor = Color.Magenta) {
-        Column(
-            modifier = Modifier.fillMaxWidth(),
-            verticalArrangement = Arrangement.Center,
-            horizontalAlignment = Alignment.CenterHorizontally
-        ) {
+        }, backgroundColor = Color.White) {
+            Column(
+                modifier = Modifier.fillMaxWidth(),
+                verticalArrangement = Arrangement.Center,
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
 
-            IconButton(onClick = {onImageDelete(image)}, modifier = Modifier.align(Alignment.End)) {
-                Icon(Icons.Filled.Delete, "Delete image")
-            }
-            AsyncImage(model = image.uri.toString(), contentDescription = "galleryImage")
-            Text(text = annotatedString, modifier = Modifier.combinedClickable(
-                onClick = {
-                    image.link?.let {
-                        uriHandler.openUri(it)
-                    }
-                },
-                onLongClick = {
-                    image.link?.let {
-                        clipboardManager.setText(AnnotatedString(it))
-                        Toast.makeText(context, "URL copied to Clipboard", Toast.LENGTH_SHORT)
-                            .show()
-                    }
+                IconButton(onClick = {onImageDelete(image)}, modifier = Modifier.align(Alignment.End)) {
+                    Icon(Icons.Filled.Delete, "Delete image")
                 }
-            ))
+                AsyncImage(model = image.uri.toString(), contentDescription = "galleryImage", contentScale = ContentScale.Fit, modifier = Modifier
+                    .height(200.dp)
+                    .width(200.dp))
+                Text(text = annotatedString, modifier = Modifier.combinedClickable(
+                    onClick = {
+                        image.link?.let {
+                            uriHandler.openUri(it)
+                        }
+                    },
+                    onLongClick = {
+                        image.link?.let {
+                            clipboardManager.setText(AnnotatedString(it))
+                            Toast.makeText(context, "URL copied to Clipboard", Toast.LENGTH_SHORT)
+                                .show()
+                        }
+                    }
+                ))
+
 
         }
         if (image.isUploadStarted && !image.isUploadCompleted) {
-            Row(modifier = Modifier.fillMaxSize(), verticalAlignment = Alignment.CenterVertically) {
-                Loader()
-            }
-
+            Loader(Modifier.padding(top = 48.dp))
         }
+
     }
 
 

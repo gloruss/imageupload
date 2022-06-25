@@ -29,10 +29,9 @@ class CountriesViewModel @Inject constructor(
     fun getCountryList(){
         viewModelScope.launch {
             try {
-                countryUseCase.invoke().collect{
-                    list ->
+                val list = countryUseCase.invoke()
+
                     _countryFlow.value = DataState(list)
-                }
             }
             catch (e : Exception){
                 _countryFlow.value = DataState(exception = e.message)

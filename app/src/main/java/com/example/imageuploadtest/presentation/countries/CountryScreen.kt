@@ -59,7 +59,7 @@ fun CountryScreenContent(
             }
 
             if(countryState.loading){
-                Loader()
+                Loader(Modifier)
             }
 
             if(!countryState.exception.isNullOrEmpty()){
@@ -135,9 +135,9 @@ fun ErrorMessage(message : String){
 
 
 @Composable
-fun Loader(){
+fun Loader(modifier: Modifier ){
     Box(
-        modifier = Modifier.fillMaxSize(),
+        modifier = modifier.fillMaxSize(),
         contentAlignment = Alignment.Center,
 
     ) {
