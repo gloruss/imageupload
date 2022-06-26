@@ -72,6 +72,8 @@ dependencies {
 
     // Hilt
     implementation(Libs.HILT_ANDROID)
+    testImplementation("junit:junit:4.12")
+    testImplementation("junit:junit:4.12")
     kapt(Libs.HILT_COMPILER)
     implementation(Libs.HILT_NAVIGATION)
 
