@@ -1,7 +1,7 @@
 object Sdk {
     const val MIN_VERSION = 21
-    const val TARGET_VERSION = 32
-    const val COMPILE_VERSION = 32
+    const val TARGET_VERSION = 31
+    const val COMPILE_VERSION = 31
 }
 
 object App {

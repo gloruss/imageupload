@@ -14,7 +14,7 @@ object Versions{
     const val MOCKK = "1.12.0"
     const val KOTEST = "4.6.3"
     const val CORE_TESTING = "2.1.0"
-    const val COMPOSE ="1.2.0-rc01"
+    const val COMPOSE ="1.2.0-beta02"
     const val ACTIVITY_COMPOSE="1.3.1"
     const val LIFECYCLE ="2.4.0"
     const val COIL = "2.0.0-rc02"
