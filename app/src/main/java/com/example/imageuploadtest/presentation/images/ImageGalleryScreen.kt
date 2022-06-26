@@ -22,6 +22,8 @@ import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Delete
+import androidx.compose.material.icons.filled.Done
+import androidx.compose.material.icons.filled.Send
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -136,19 +138,17 @@ fun ImageCell(image: Image, onCardClick: (Image) -> Unit,onImageDelete: (Image) 
     val uriHandler = LocalUriHandler.current
     val clipboardManager: ClipboardManager = LocalClipboardManager.current
     val annotatedString = buildAnnotatedString {
-        if(image.link == null){
-            append("Click image to Upload")
-        }
-        else{
-            append( image.link!!)
+        image.link?.let {
+            link->
+            append(link)
             addStyle(
                 style = SpanStyle(
                     color = Color.Blue,
                     textDecoration = TextDecoration.Underline,
 
-                ),
+                    ),
                 start = 0,
-                end = image.link!!.length
+                end = link.length
             )
         }
 
@@ -164,27 +164,44 @@ fun ImageCell(image: Image, onCardClick: (Image) -> Unit,onImageDelete: (Image) 
                 verticalArrangement = Arrangement.Center,
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
-
-                IconButton(onClick = {onImageDelete(image)}, modifier = Modifier.align(Alignment.End)) {
-                    Icon(Icons.Filled.Delete, "Delete image")
-                }
-                AsyncImage(model = image.uri.toString(), contentDescription = "galleryImage", contentScale = ContentScale.Fit, modifier = Modifier
-                    .height(200.dp)
-                    .width(200.dp))
-                Text(text = annotatedString, modifier = Modifier.combinedClickable(
-                    onClick = {
-                        image.link?.let {
-                            uriHandler.openUri(it)
-                        }
-                    },
-                    onLongClick = {
-                        image.link?.let {
-                            clipboardManager.setText(AnnotatedString(it))
-                            Toast.makeText(context, "URL copied to Clipboard", Toast.LENGTH_SHORT)
-                                .show()
-                        }
+                Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
+                    IconButton(onClick = {onCardClick(image)},) {
+                        Icon(if(!image.isUploadCompleted)Icons.Filled.Send else Icons.Filled.Done , "Upload image")
                     }
-                ))
+                    IconButton(onClick = {onImageDelete(image)}, ) {
+                        Icon(Icons.Filled.Delete, "Delete image")
+                    }
+                }
+
+                AsyncImage(model = image.uri.toString(), contentDescription = "galleryImage", contentScale = ContentScale.Fit, modifier = Modifier
+                    )
+                if(image.exception != null){
+                    Text(text = image.exception, modifier = Modifier.padding(4.dp))
+                }
+                else {
+                    Text(text = annotatedString, modifier = Modifier
+                        .combinedClickable(
+                            onClick = {
+                                image.link?.let {
+                                    uriHandler.openUri(it)
+                                }
+                            },
+                            onLongClick = {
+                                image.link?.let {
+                                    clipboardManager.setText(AnnotatedString(it))
+                                    Toast
+                                        .makeText(
+                                            context,
+                                            "URL copied to Clipboard",
+                                            Toast.LENGTH_SHORT
+                                        )
+                                        .show()
+                                }
+                            }
+                        )
+                        .padding(4.dp))
+                }
+
 
 
         }

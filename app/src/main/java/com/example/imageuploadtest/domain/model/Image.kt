@@ -4,6 +4,7 @@ import android.net.Uri
 
 data class Image(
     val uri : Uri,
-    var link : String? = null,
+    val link : String? = null,
     val isUploadStarted : Boolean = false,
-    var isUploadCompleted : Boolean = false)
+    val isUploadCompleted : Boolean = false,
+    val exception : String? = null)

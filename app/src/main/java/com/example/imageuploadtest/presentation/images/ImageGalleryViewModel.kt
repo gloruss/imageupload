@@ -35,21 +35,23 @@ class ImageGalleryViewModel @Inject constructor(
     }
 
     fun uploadImage(image: Image){
-
+        val replaceList =  _imageFlow.value.data!!.toMutableList()
+        val replaceIndex = replaceList.indexOfFirst { it.uri.toString() == image.uri.toString() }
             viewModelScope.launch {
                 val tempList =   _imageFlow.value.data!!.toMutableList()
                 tempList[tempList.indexOf(image)] = image.copy(isUploadStarted = true)
                 _imageFlow.value = DataState(tempList)
             try {
                 useCase.invoke(image.uri).collect{ link ->
-                    val replaceList =  _imageFlow.value.data!!.toMutableList()
-                    replaceList[replaceList.indexOfFirst { it.uri.toString() == image.uri.toString() }] = image.copy(link = link, isUploadCompleted = true, isUploadStarted = false)
+                   // val replaceList =  _imageFlow.value.data!!.toMutableList()
+                    replaceList[replaceIndex] = image.copy(link = link, isUploadCompleted = true, isUploadStarted = false, exception = null)
                 _imageFlow.value = DataState(replaceList)
 
                 }
             } catch (e: Exception) {
                 Log.d("UploadError", e.message ?: "error")
-
+                replaceList[replaceIndex] = image.copy(isUploadStarted = false, exception = e.message)
+                _imageFlow.value = DataState(replaceList)
             }
         }
     }

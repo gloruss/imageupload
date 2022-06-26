@@ -128,7 +128,7 @@ fun ErrorMessage(message : String){
         contentAlignment = Alignment.Center,
     ) {
         Text(
-            text = message,
+            text = message, fontSize = 20.sp
         )
     }
 }
